@@ -9,6 +9,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private string verticalInputName;
     [SerializeField] private float movementSpeed;
 
+    [SerializeField] private float slopeForce;
+    [SerializeField] private float slopeForceRayLength;
+
     private CharacterController charController;
 
     [SerializeField] private AnimationCurve jumpFallOff;
@@ -41,15 +44,36 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerMovement()
     {
-        float vertInput = Input.GetAxisRaw(verticalInputName) * movementSpeed;
-        float horizInput = Input.GetAxisRaw(horizontalInputName) * movementSpeed;
+        float vertInput = Input.GetAxisRaw(verticalInputName);
+        float horizInput = Input.GetAxisRaw(horizontalInputName);
 
         Vector3 forwardMovement = transform.forward * vertInput;
         Vector3 rightMovement = transform.right * horizInput;
 
-        charController.SimpleMove(forwardMovement + rightMovement);
+        charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
+
+        if ((vertInput != 0 || horizInput != 0) && OnSlope())
+            charController.Move(Vector3.down * charController.height / 2 * slopeForce * Time.deltaTime);
+                
+     
+
+
 
         JumpInput();
+
+    }
+
+    private bool OnSlope()
+    {
+        if (isJumping)
+            return false;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, charController.height / 2 * slopeForceRayLength))
+            if (hit.normal != Vector3.up)
+                return true;
+        return false;
 
     }
 
@@ -65,6 +89,8 @@ public class PlayerMove : MonoBehaviour
     private IEnumerator JumpEvent()
     {
         float timeInAir = 0.0f;
+        charController.slopeLimit = 90.0f;
+
         do
         {
             float jumpForce = jumpFallOff.Evaluate(timeInAir);
@@ -75,6 +101,8 @@ public class PlayerMove : MonoBehaviour
 
         } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
 
+
+        charController.slopeLimit = 45.0f;
         isJumping = false;
 
     }
