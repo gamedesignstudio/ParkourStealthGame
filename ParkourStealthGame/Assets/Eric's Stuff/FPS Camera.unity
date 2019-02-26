@@ -725,7 +725,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119332029}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.662, z: 0.294}
+  m_LocalPosition: {x: 0, y: 0.662, z: 0.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 684595246}
@@ -868,6 +868,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 4b9e650b80b2a4349bfcdeb6c0b36ae1, type: 2}
+    - target: {fileID: 9500000, guid: 3b08a12e734199341b12be242f195674, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b08a12e734199341b12be242f195674, type: 3}
 --- !u!1 &1121116847
@@ -1169,3 +1173,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   runKey: 119
+  backKey: 115
+  jumpKey: 32

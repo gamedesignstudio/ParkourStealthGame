@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 10f6c154c2868924db155921afeaa636
+guid: 82ff3f9e40a43e84b8baa31b88444cce
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -147,7 +147,7 @@ ModelImporter:
     2100002: Alpha_Joints_MAT
     4300000: Alpha_Surface
     4300002: Alpha_Joints
-    7400000: Slow Jog Backwards
+    7400000: Running Backward
     9500000: //RootNode
     13700000: Alpha_Joints
     13700002: Alpha_Surface
@@ -180,10 +180,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Slow Jog Backwards
+      name: Running Backward
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 22
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

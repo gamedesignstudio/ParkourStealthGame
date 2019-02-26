@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 4b9e650b80b2a4349bfcdeb6c0b36ae1, type: 2}
+    - target: {fileID: 9500000, guid: 3b08a12e734199341b12be242f195674, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b08a12e734199341b12be242f195674, type: 3}
 --- !u!1 &212199053
@@ -344,6 +348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   runKey: 119
+  backKey: 115
+  jumpKey: 32
 --- !u!1 &1725431731
 GameObject:
   m_ObjectHideFlags: 0

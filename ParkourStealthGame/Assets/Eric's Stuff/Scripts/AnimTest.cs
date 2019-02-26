@@ -7,6 +7,10 @@ public class AnimTest : MonoBehaviour
 
     public Animator anim;
     [SerializeField] private KeyCode runKey;
+    [SerializeField] private KeyCode backKey;
+    [SerializeField] private KeyCode jumpKey;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,5 +27,14 @@ public class AnimTest : MonoBehaviour
         else
             anim.SetBool("isJogging", false);
 
+        if (Input.GetKey(backKey))
+            anim.SetBool("isReversing", true);
+        else
+            anim.SetBool("isReversing", false);
+
+        if (Input.GetKey(jumpKey))
+            anim.SetBool("isJumping", true);
+        else
+            anim.SetBool("isJumping", false);
     }
 }
