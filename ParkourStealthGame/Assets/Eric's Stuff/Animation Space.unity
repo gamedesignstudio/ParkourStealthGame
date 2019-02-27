@@ -350,6 +350,8 @@ MonoBehaviour:
   runKey: 119
   backKey: 115
   jumpKey: 32
+  sprintKey: 304
+  crouchKey: 308
 --- !u!1 &1725431731
 GameObject:
   m_ObjectHideFlags: 0

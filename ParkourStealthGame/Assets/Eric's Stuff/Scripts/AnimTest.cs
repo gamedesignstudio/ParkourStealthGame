@@ -9,6 +9,8 @@ public class AnimTest : MonoBehaviour
     [SerializeField] private KeyCode runKey;
     [SerializeField] private KeyCode backKey;
     [SerializeField] private KeyCode jumpKey;
+    [SerializeField] private KeyCode sprintKey;
+    [SerializeField] private KeyCode crouchKey;
 
 
 
@@ -36,5 +38,15 @@ public class AnimTest : MonoBehaviour
             anim.SetBool("isJumping", true);
         else
             anim.SetBool("isJumping", false);
+
+        if (Input.GetKey(crouchKey))
+            anim.SetBool("isCrouching", true);
+        else
+            anim.SetBool("isCrouching", false);
+
+        if (Input.GetKey(sprintKey))
+            anim.SetBool("isSprinting", true);
+        else
+            anim.SetBool("isSprinting", false);
     }
 }
