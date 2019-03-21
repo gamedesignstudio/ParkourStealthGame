@@ -62,6 +62,9 @@ public class PlayerMove : MonoBehaviour
         if ((vertInput != 0 || horizInput != 0) && OnSlope())
             charController.Move(Vector3.down * charController.height / 2 * slopeForce * Time.deltaTime);
 
+        if (charController.collisionFlags == CollisionFlags.Sides)
+            isJumping = false;
+
 
         SetMovementSpeed();
 
@@ -100,6 +103,7 @@ public class PlayerMove : MonoBehaviour
             isJumping = true;
             StartCoroutine(JumpEvent());
         }
+        
     }
 
     private IEnumerator JumpEvent()
