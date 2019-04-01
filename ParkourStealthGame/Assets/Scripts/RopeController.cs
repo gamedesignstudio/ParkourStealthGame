@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RopeController : MonoBehaviour
 {
-    //Object that will interact with the rope
+  /*  //Object that will interact with the rope
     public Transform ropeConnectedTo;
     public Transform hangingFromRope;
 
@@ -102,5 +102,5 @@ public class RopeController : MonoBehaviour
 
             //unfinished
         }
-    }
+    }*/
 }
