@@ -6,19 +6,34 @@ public class TimeController : MonoBehaviour
 {
     private int minutes;
     private int seconds;
+    private int frames;
 
     // Start is called before the first frame update
     void Start()
     {
         minutes = 0;
         seconds = 0;
+        frames = 0;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        CountSeconds();
+        CountFrames();
         Debug.Log("Timer  " + minutes + ":" + seconds);
+    }
+
+    private void CountFrames()
+    {
+        if(frames == 50)
+        {
+            CountSeconds();
+            frames = 0;
+        }
+        else
+        {
+            frames += 1;
+        }
     }
 
     //count seconds
