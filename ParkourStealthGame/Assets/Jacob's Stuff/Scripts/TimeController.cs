@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TimeController : MonoBehaviour
 {
+    TextMeshProUGUI timerText;
+
     private int minutes;
     private int seconds;
     private int frames;
@@ -11,6 +14,8 @@ public class TimeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        timerText = GetComponent<TextMeshProUGUI>();
         minutes = 0;
         seconds = 0;
         frames = 0;
@@ -20,6 +25,7 @@ public class TimeController : MonoBehaviour
     void FixedUpdate()
     {
         CountFrames();
+        //timerText.text = (minutes + ":" + seconds);
         Debug.Log("Timer  " + minutes + ":" + seconds);
     }
 
