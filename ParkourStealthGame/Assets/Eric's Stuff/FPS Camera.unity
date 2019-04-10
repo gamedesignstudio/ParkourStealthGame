@@ -476,7 +476,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 644361991}
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -21.31, y: 4.96, z: -4.7}
+  m_LocalPosition: {x: -18.97, y: 4.96, z: -4.7}
   m_LocalScale: {x: 16.242, y: 0.3508, z: 9.6177}
   m_Children: []
   m_Father: {fileID: 0}
@@ -509,20 +509,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 684595243}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceef34e42a0eca24c9c3919b53025ac3, type: 3}
+  m_Script: {fileID: 11500000, guid: a8610c9dbb9f3f147995608b675e673c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalInputName: Vertical
   horizontalInputName: Horizontal
+  verticalInputName: Vertical
   walkSpeed: 5
-  runSpeed: 10
+  runSpeed: 12
   runBuildUp: 8
-  runSlowDown: 10
+  runSlowDown: 11
   runKey: 304
   slopeForce: 5
   slopeForceRayLength: 1.5
-  jumpForce: 5
-  gravityScale: 1
+  jumpFallOff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0016403198
+      value: 1.0023499
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6976929
+      value: 0.000019073486
+      inSlope: -0.3297105
+      outSlope: -0.3297105
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07893949
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  jumpMultiplier: 10
+  jumpKey: 32
 --- !u!143 &684595245
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1045,8 +1069,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseXInputName: Mouse X
   mouseYInputName: Mouse Y
+<<<<<<< HEAD
   mouseSensitivity: 5
   playerBody: {fileID: 37453800}
+=======
+  mouseSensitivity: 7.5
+  playerBody: {fileID: 684595246}
+>>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
 --- !u!20 &1119332033
 Camera:
   m_ObjectHideFlags: 0
@@ -1180,6 +1209,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -2, y: -90, z: 92}
+<<<<<<< HEAD
 --- !u!1 &1595126663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,6 +1301,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+=======
+>>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
 --- !u!1 &1959500919
 GameObject:
   m_ObjectHideFlags: 0
