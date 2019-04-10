@@ -448,29 +448,6 @@ MonoBehaviour:
   jumpKey: 32
   sprintKey: 304
   crouchKey: 59
---- !u!114 &1518214198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518214194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceef34e42a0eca24c9c3919b53025ac3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  verticalInputName: Vertical
-  horizontalInputName: Horizontal
-  walkSpeed: 5
-  runSpeed: 8
-  runBuildUp: 1.5
-  runSlowDown: 0.5
-  runKey: 304
-  slopeForce: 0.8
-  slopeForceRayLength: 0.8
-  jumpForce: 1
-  gravityScale: 0.5
 --- !u!143 &1518214199
 CharacterController:
   m_ObjectHideFlags: 0
