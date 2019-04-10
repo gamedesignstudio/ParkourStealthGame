@@ -1070,9 +1070,12 @@ MonoBehaviour:
   mouseXInputName: Mouse X
   mouseYInputName: Mouse Y
 <<<<<<< HEAD
+<<<<<<< HEAD
   mouseSensitivity: 5
   playerBody: {fileID: 37453800}
 =======
+=======
+>>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
   mouseSensitivity: 7.5
   playerBody: {fileID: 684595246}
 >>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
@@ -1210,6 +1213,7 @@ Transform:
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -2, y: -90, z: 92}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &1595126663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,6 +1305,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+=======
+>>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
 =======
 >>>>>>> parent of 9213fea... Started new Player Move, added assets to Leve Design1
 --- !u!1 &1959500919
