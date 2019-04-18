@@ -51,6 +51,7 @@ public class PauseMenuController : MonoBehaviour
     {
         Debug.Log("Exitting to Main Menu...");
         Debug.Log("Opening Scene: " + SceneToLoad);
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneToLoad.name);
     }
 
