@@ -53,6 +53,7 @@ public class PauseMenuController : MonoBehaviour
         Debug.Log("Opening Scene: " + SceneToLoad);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneToLoad.name);
+        isPaused = false;
     }
 
     public void CursorLock()
