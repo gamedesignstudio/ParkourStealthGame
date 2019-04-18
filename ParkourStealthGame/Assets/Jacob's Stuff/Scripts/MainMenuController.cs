@@ -7,6 +7,10 @@ public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private Object SceneToLoad;
 
+    void Start() {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 
     public void PlayGame()
     {
