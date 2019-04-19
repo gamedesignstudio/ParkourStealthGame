@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float runBuildUp, runSlowDown;
 
     [SerializeField] private KeyCode runKey;
+    [SerializeField] private KeyCode slideKey;
 
 
      private float movementSpeed;
@@ -64,17 +65,36 @@ public class PlayerMove : MonoBehaviour
 
 
         SetMovementSpeed();
-
+        SetHeight();
         JumpInput();
 
     }
+    private void SetHeight()
+    {
+        if (Input.GetKey(slideKey))
+        {
+            charController.height = 0.5f;
 
+
+
+        }
+        else
+            charController.height = 2f;
+    }
     private void SetMovementSpeed()
     {
         if (Input.GetKey(runKey))
             movementSpeed = Mathf.Lerp(movementSpeed, runSpeed, Time.deltaTime * runBuildUp);
+        
         else
+        {
             movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime * runSlowDown);
+
+        }
+
+        
+
+
     }
 
 

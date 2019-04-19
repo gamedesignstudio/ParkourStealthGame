@@ -62,9 +62,9 @@ public class PlayerLook : MonoBehaviour
 
     private void ClampXAxisRotationToValue(float value)
     {
-        Vector3 eulerRoation = transform.eulerAngles;
-        eulerRoation.x = value;
-        transform.eulerAngles = eulerRoation;
+        Vector3 eulerRotation = transform.eulerAngles;
+        eulerRotation.x = value;
+        transform.eulerAngles = eulerRotation;
 
     }
 

@@ -12,12 +12,18 @@ public class BasicAnimCon : MonoBehaviour
     [SerializeField] private KeyCode sprintKey;
     [SerializeField] private KeyCode crouchKey;
 
-
+    // [SerializeField] private GameObject charController;
 
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        //charController = GetComponent<GameObject>();
+    }
     void Start()
     {
         anim = this.GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -40,7 +46,10 @@ public class BasicAnimCon : MonoBehaviour
             anim.SetBool("isJumping", false);
 
         if (Input.GetKey(crouchKey))
+        {
             anim.SetBool("isCrouching", true);
+            
+        }
         else
             anim.SetBool("isCrouching", false);
 
