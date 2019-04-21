@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
     public Vector3 targetPosition;
     public Quaternion targetRotation;
     public GameObject target;
+    [SerializeField] KeyCode crouch;
     //private Vector3 rotationLimitStart;
     //private Vector3 rotationLimitEnd;
 
@@ -26,6 +27,14 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(crouch))
+        {
+            distanceUp = 9;
+        }
+        if(Input.GetKeyUp(crouch))
+        {
+            distanceUp = 15;
+        }
         //transform.Rotate(0, 0, 0);
     }
 

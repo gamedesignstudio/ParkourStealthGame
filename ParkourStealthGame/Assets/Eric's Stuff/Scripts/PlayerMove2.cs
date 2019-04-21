@@ -10,11 +10,12 @@ public class PlayerMove2 : MonoBehaviour
 
     //Floats for the speed of walking and running, as well as
     //floats for the acceleration and decceleration
-    [SerializeField] private float walkSpeed, runSpeed;
+    [SerializeField] private float crouchSpeed, walkSpeed, runSpeed;
     [SerializeField] private float runBuildUp, runSlowDown;
 
     //Variable for forward movement ('W') key;
     [SerializeField] private KeyCode runKey;
+    [SerializeField] private KeyCode crouchKey;
     //Movement Speed as float
     private float movementSpeed;
     //Floats that determine the slope of a plane and
@@ -30,6 +31,7 @@ public class PlayerMove2 : MonoBehaviour
     private CharacterController charController;
 
     //Variables for climbing
+    [SerializeField] private float climbSpeed;
     [SerializeField] private KeyCode ascend;
     [SerializeField] private KeyCode decend;
     [SerializeField] private KeyCode climbL;
@@ -37,6 +39,7 @@ public class PlayerMove2 : MonoBehaviour
     [SerializeField] private float maxReach;
     private Vector3 pointLocation;
     List<GameObject> clmbPtList = new List<GameObject>();
+    [SerializeField] Transform player;
 
 
 
@@ -57,10 +60,6 @@ public class PlayerMove2 : MonoBehaviour
     {
         PlayerMovement();
         ClimbingCheck();
-        if (Input.GetKeyDown("y"))
-        {
-            transform.Translate(Vector3.up * 100 * Time.deltaTime, Camera.main.transform);
-        }
     }
 
     private void PlayerMovement()
@@ -84,6 +83,8 @@ public class PlayerMove2 : MonoBehaviour
     {
         if (Input.GetKey(runKey))
             movementSpeed = Mathf.Lerp(movementSpeed, runSpeed, Time.deltaTime * runBuildUp);
+        else if (Input.GetKey(crouchKey))
+            movementSpeed = Mathf.Lerp(movementSpeed, crouchSpeed, Time.deltaTime * runSlowDown);
         else
             movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime * runSlowDown);
     }
@@ -93,33 +94,50 @@ public class PlayerMove2 : MonoBehaviour
     {
         if (Input.GetKeyDown(ascend))
         {
+            Debug.Log("Climbing up");
             ClimbUp();
         }
         if (Input.GetKeyDown(decend))
         {
+            Debug.Log("Climbing down");
             ClimbDown();
         }
         if (Input.GetKeyDown(climbL))
         {
+            Debug.Log("Climbing Left");
             ClimbLeft();
         }
         if (Input.GetKeyDown(climbR))
         {
+            Debug.Log("Climbing Right");
             ClimbRight();
         }
     }
 
     private void ClimbUp()
     {
+        /*Doesn't Work
+        //move up 
+        if (Input.GetKey(ascend))
+        {
+            moveDirection.y = climbSpeed;
+        }*/
+
         clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 1);
         pointLocation = FurthestReachablePoint(clmbPtList);
-        this.transform.Translate(pointLocation.y, 0, 0);
+        Debug.Log("pointLocation found at: " + pointLocation);
+        Debug.Log("Player location: " + this.transform.position);
+        player.position = pointLocation;
+        Debug.Log("Player location: " + this.transform.position);
+        Debug.Log("Player location: " + this.transform.position);
+        
     }
 
     private void ClimbDown()
     {
         clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 3);
         pointLocation = FurthestReachablePoint(clmbPtList);
+        Debug.Log("pointLocation found at: " + pointLocation);
         this.transform.Translate(pointLocation.y, 0, 0); 
 
     }
@@ -128,6 +146,7 @@ public class PlayerMove2 : MonoBehaviour
     {
         clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 4);
         pointLocation = FurthestReachablePoint(clmbPtList);
+        Debug.Log("pointLocation found at: " + pointLocation);
         this.transform.Translate(pointLocation.x, 0, 0); //may need to chang if orientation is different
     }
 
@@ -135,6 +154,7 @@ public class PlayerMove2 : MonoBehaviour
     {
         clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 2);
         pointLocation = FurthestReachablePoint(clmbPtList);
+        Debug.Log("pointLocation found at: " + pointLocation);
         this.transform.Translate(pointLocation.x, 0, 0);  //may need to chang if orientation is different
     }
 
