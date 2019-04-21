@@ -29,6 +29,15 @@ public class PlayerMove2 : MonoBehaviour
     //Character Controller
     private CharacterController charController;
 
+    //Variables for climbing
+    [SerializeField] private KeyCode ascend;
+    [SerializeField] private KeyCode decend;
+    [SerializeField] private KeyCode climbL;
+    [SerializeField] private KeyCode climbR;
+    [SerializeField] private float maxReach;
+    private Vector3 pointLocation;
+    List<GameObject> clmbPtList = new List<GameObject>();
+
 
 
 
@@ -47,6 +56,11 @@ public class PlayerMove2 : MonoBehaviour
     void Update()
     {
         PlayerMovement();
+        ClimbingCheck();
+        if (Input.GetKeyDown("y"))
+        {
+            transform.Translate(Vector3.up * 100 * Time.deltaTime, Camera.main.transform);
+        }
     }
 
     private void PlayerMovement()
@@ -73,5 +87,139 @@ public class PlayerMove2 : MonoBehaviour
         else
             movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime * runSlowDown);
     }
+
+    //check to see if a climbing movement key is being pressed
+    private void ClimbingCheck()
+    {
+        if (Input.GetKeyDown(ascend))
+        {
+            ClimbUp();
+        }
+        if (Input.GetKeyDown(decend))
+        {
+            ClimbDown();
+        }
+        if (Input.GetKeyDown(climbL))
+        {
+            ClimbLeft();
+        }
+        if (Input.GetKeyDown(climbR))
+        {
+            ClimbRight();
+        }
+    }
+
+    private void ClimbUp()
+    {
+        clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 1);
+        pointLocation = FurthestReachablePoint(clmbPtList);
+        this.transform.Translate(pointLocation.y, 0, 0);
+    }
+
+    private void ClimbDown()
+    {
+        clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 3);
+        pointLocation = FurthestReachablePoint(clmbPtList);
+        this.transform.Translate(pointLocation.y, 0, 0); 
+
+    }
+
+    private void ClimbLeft()
+    {
+        clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 4);
+        pointLocation = FurthestReachablePoint(clmbPtList);
+        this.transform.Translate(pointLocation.x, 0, 0); //may need to chang if orientation is different
+    }
+
+    private void ClimbRight()
+    {
+        clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 2);
+        pointLocation = FurthestReachablePoint(clmbPtList);
+        this.transform.Translate(pointLocation.x, 0, 0);  //may need to chang if orientation is different
+    }
+
+    /*
+     * for int dir:
+     * up = 1; right = 2; down = 3; left = 4
+     */
+    private List<GameObject> FindAllReachablePoints(Vector3 playerLoc, float maxDis, int dir)
+    {
+        List<GameObject> tempList = new List<GameObject>();
+        GameObject[] tempArray;
+        tempArray = GameObject.FindGameObjectsWithTag("climbingPoint");
+
+        foreach(GameObject o in tempArray)
+        {
+            tempList.Add(o);
+        }
+
+        foreach(GameObject cP in tempList)
+        {
+            if (maxDis < Vector3.Distance(cP.transform.position, this.transform.position))
+            {
+                tempList.Remove(cP);
+            }
+            else if(dir == 1)
+            {
+                if(this.transform.position.y >= cP.transform.position.y)
+                {
+                    tempList.Remove(cP);
+                }
+            }
+            else if(dir == 2)
+            {
+                if (this.transform.position.y >= cP.transform.position.y)
+                {
+                    tempList.Remove(cP);
+                }
+            }
+            else if(dir == 3)
+            {
+                if (this.transform.position.y <= cP.transform.position.y)
+                {
+                    tempList.Remove(cP);
+                }
+            }
+            else if(dir == 4)
+            {
+                if (this.transform.position.x <= cP.transform.position.x)
+                {
+                    tempList.Remove(cP);
+                }
+            }
+            else
+            {
+                Debug.Log("Passed wrong direction to FindAllReachablePoints()");
+            }
+
+        }
+        return tempList;
+    }
+
+    //find the furthest point that is in reach; return its position 
+    private Vector3 FurthestReachablePoint(List<GameObject> list)
+    {
+        GameObject fP = null;
+        if(list.Count > 0)
+        {
+            foreach (GameObject cP in list)
+            {
+                //if furthest point is null, set it to current point
+                if (fP == null)
+                {
+                    fP = cP;
+                }
+
+                fP = fP.GetComponent<ClimbPoints>().CompareDist(cP);
+            }
+            return fP.transform.position;
+        }
+        else
+        {
+            //player stays where they are
+            return this.transform.position;
+        }
+    }
+
 
 }
