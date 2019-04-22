@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove2 : MonoBehaviour
-{
+public class PlayerMove2 : MonoBehaviour {
     //Variable Names for Unity's Input Manager
     [SerializeField] private string verticalInputName;
     [SerializeField] private string horizontalInputName;
@@ -16,6 +15,7 @@ public class PlayerMove2 : MonoBehaviour
     //Variable for forward movement ('W') key;
     [SerializeField] private KeyCode runKey;
     [SerializeField] private KeyCode crouchKey;
+    [SerializeField] private KeyCode jumpKey;
     //Movement Speed as float
     private float movementSpeed;
     //Floats that determine the slope of a plane and
@@ -40,6 +40,9 @@ public class PlayerMove2 : MonoBehaviour
     private Vector3 pointLocation;
     List<GameObject> clmbPtList = new List<GameObject>();
     [SerializeField] Transform player;
+    private bool isJumping;
+    [SerializeField] private AnimationCurve jumpFallOff;
+    [SerializeField] private float jumpMultiplier;
 
 
 
@@ -60,6 +63,15 @@ public class PlayerMove2 : MonoBehaviour
     {
         PlayerMovement();
         ClimbingCheck();
+
+        if(Input.GetKeyDown(crouchKey)) {
+            movementSpeed = Mathf.Lerp(movementSpeed, crouchSpeed, Time.deltaTime * runSlowDown);
+            charController.height /= 2f;
+        }
+        else if(Input.GetKeyUp(crouchKey)) {
+            movementSpeed = Mathf.Lerp(movementSpeed, crouchSpeed, Time.deltaTime * runSlowDown);
+            charController.height *= 2f;
+        }
     }
 
     private void PlayerMovement()
@@ -75,18 +87,50 @@ public class PlayerMove2 : MonoBehaviour
         // if ((vertInput != 0 || horizInput != 0) && OnSlope())
         // charController.Move(Vector3.down * charController.height / 2 * slopeForce * Time.deltaTime);
         SetMovementSpeed();
+        JumpInput();
 
        
     }
 
     private void SetMovementSpeed()
     {
-        if (Input.GetKey(runKey))
+        if(Input.GetKey(runKey)) {
             movementSpeed = Mathf.Lerp(movementSpeed, runSpeed, Time.deltaTime * runBuildUp);
-        else if (Input.GetKey(crouchKey))
+
+        }
+        else if(Input.GetKey(crouchKey)) {
             movementSpeed = Mathf.Lerp(movementSpeed, crouchSpeed, Time.deltaTime * runSlowDown);
-        else
+        }
+        else {
             movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime * runSlowDown);
+        }
+    }
+
+    private void JumpInput(){
+        if(Input.GetKeyDown(jumpKey) && !isJumping) {
+            isJumping = true;
+            StartCoroutine(JumpEvent());
+        }
+    }
+
+    private IEnumerator JumpEvent() {
+
+        float timeInAir = 0.0f;
+        charController.slopeLimit = 90.0f;
+
+        do {
+
+            float jumpForce = jumpFallOff.Evaluate(timeInAir);
+            charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
+            timeInAir += Time.deltaTime;
+
+            yield return null;
+
+        } while(!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
+
+        charController.slopeLimit = 45.0f;
+        isJumping = false;
+    
     }
 
     //check to see if a climbing movement key is being pressed
@@ -127,7 +171,8 @@ public class PlayerMove2 : MonoBehaviour
         pointLocation = FurthestReachablePoint(clmbPtList);
         Debug.Log("pointLocation found at: " + pointLocation);
         Debug.Log("Player location: " + this.transform.position);
-        player.position = pointLocation;
+        //player.position = pointLocation;
+        charController.Move(Vector3.up * climbSpeed);
         Debug.Log("Player location: " + this.transform.position);
         Debug.Log("Player location: " + this.transform.position);
         
