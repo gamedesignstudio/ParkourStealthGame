@@ -74,7 +74,7 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKey(slideKey))
         {
             charController.height = 0.5f;
-
+          
 
 
         }
@@ -85,11 +85,10 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKey(runKey))
             movementSpeed = Mathf.Lerp(movementSpeed, runSpeed, Time.deltaTime * runBuildUp);
-        
+
         else
         {
             movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime * runSlowDown);
-
         }
 
         
