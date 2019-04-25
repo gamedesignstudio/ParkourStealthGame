@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove2 : MonoBehaviour {
+    [SerializeField] private Rigidbody rigi;
+
     //Variable Names for Unity's Input Manager
     [SerializeField] private string verticalInputName;
     [SerializeField] private string horizontalInputName;
@@ -36,6 +38,7 @@ public class PlayerMove2 : MonoBehaviour {
     [SerializeField] private KeyCode decend;
     [SerializeField] private KeyCode climbL;
     [SerializeField] private KeyCode climbR;
+    [SerializeField] private int climbOver;
     [SerializeField] private float maxReach;
     private Vector3 pointLocation;
     List<GameObject> clmbPtList = new List<GameObject>();
@@ -160,20 +163,18 @@ public class PlayerMove2 : MonoBehaviour {
 
     private void ClimbUp()
     {
-        /*Doesn't Work
-        //move up 
-        if (Input.GetKey(ascend))
-        {
-            moveDirection.y = climbSpeed;
-        }*/
+      
 
         clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 1);
         pointLocation = FurthestReachablePoint(clmbPtList);
         Debug.Log("pointLocation found at: " + pointLocation);
-        Debug.Log("Player location: " + this.transform.position);
-        //player.position = pointLocation;
+        Debug.Log("Player location: " + charController.transform.position);
+        rigi.useGravity = false;
+        gravityScale = 0;
+        slopeForce = 0;
+        charController.transform.position = pointLocation;
         charController.Move(Vector3.up * climbSpeed);
-        Debug.Log("Player location: " + this.transform.position);
+        Debug.Log("Player location: " + charController.transform.position);
         Debug.Log("Player location: " + this.transform.position);
         
     }
@@ -284,6 +285,19 @@ public class PlayerMove2 : MonoBehaviour {
             //player stays where they are
             return this.transform.position;
         }
+    }
+
+    void onTriggerStay(Collider collider)
+    {
+        if (collider.tag == "climbingPoint")
+        {
+            if (Input.GetKeyDown(ascend)) {
+                charController.Move(Vector3.forward * climbOver * Time.deltaTime);
+                rigi.useGravity = true;
+                gravityScale = 1;
+            }
+        }
+
     }
 
 
