@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] private Object SceneToLoad;
+    [SerializeField] private Scene SceneToLoad;
+    [SerializeField] private Scene LeaderboardScene;
 
     void Start() {
         Cursor.visible = true;
@@ -14,8 +15,14 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayGame()
     {
-        Debug.Log("Opening Scene: " + SceneToLoad);
-        SceneManager.LoadScene(SceneToLoad.name);
+        Debug.Log("Opening Scene: " + SceneToLoad.name);
+        SceneManager.LoadScene(SceneToLoad.handle);
+    }
+
+    public void LeaderboardMenu()
+    {
+        Debug.Log("Opening Scene: " + LeaderboardScene.name);
+        SceneManager.LoadScene(LeaderboardScene.handle);
     }
 
     public void QuitGame()

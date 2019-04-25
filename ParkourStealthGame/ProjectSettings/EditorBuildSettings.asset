@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Jacob's Stuff/Main Menu.unity
     guid: f956ec1fe6dd97442b9700c9b3fbafb5
   - enabled: 1
+    path: Assets/Jacob's Stuff/Leaderboard Menu.unity
+    guid: a6fa73147acd596429ce67e706d86f89
+  - enabled: 1
     path: Assets/Jacob's Stuff/Level Design.unity
     guid: c9763da9eb8f943bcb12ce3633ef7a9b
   m_configObjects: {}
