@@ -25,6 +25,7 @@ public class PlayerMove : MonoBehaviour
     //references to player's components
     private Transform playerTrans;
     private Rigidbody playerRigi;
+    private MeshCollider playerCol;
     private GameObject playerObj;
     
     //checks to see state of player
@@ -46,6 +47,7 @@ public class PlayerMove : MonoBehaviour
     {
         playerTrans = GetComponent<Transform>();
         playerRigi = GetComponent<Rigidbody>();
+        playerCol = GetComponent<MeshCollider>();
 
         //set the speed to normal (jogging) speed
         speed = normalSpeed;
@@ -135,17 +137,21 @@ public class PlayerMove : MonoBehaviour
 
     private bool OnSlope()
     {
-
+        //return Physics.CheckCapsule(playerCol.bounds.center, new Vector3(playerCol.bounds.center.x, playerCol.bounds.min.y, playerCol.bounds.center.z), playerCol.radius);
         return false;
     }
 
     private void JumpInput()
     {
-        if (Input.GetKey(jump))
+        if (OnSlope() && Input.GetKeyDown(jump))
         {
             isJumping = true;
+
+            //playerRigi.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+
             //move rigidbody forward
             this.transform.position = transform.position + transform.up * jumpHeight * Time.deltaTime;
+
             isJumping = false;
         }
 
