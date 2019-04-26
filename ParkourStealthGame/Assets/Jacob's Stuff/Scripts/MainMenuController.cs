@@ -15,12 +15,14 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayGame()
     {
+        Time.timeScale = 1f;
         Debug.Log("Opening Scene: " + SceneToLoad.name);
         SceneManager.LoadScene(SceneToLoad.handle);
     }
 
     public void LeaderboardMenu()
     {
+        Time.timeScale = 1f;
         Debug.Log("Opening Scene: " + LeaderboardScene.name);
         SceneManager.LoadScene(LeaderboardScene.handle);
     }

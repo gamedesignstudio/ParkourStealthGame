@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,7 +10,7 @@ public class LeaderboardController : MonoBehaviour
 
     [SerializeField] private Transform entryContainer;
     [SerializeField] private Transform entryTemplate;
-    private List<HighscoreEntry> highscoreEntryList;
+    [SerializeField] private Scene sceneToLoad;
     private List<Transform> highscoreEntryTransformList;
     
     private void Awake()
@@ -19,23 +20,43 @@ public class LeaderboardController : MonoBehaviour
 
         entryTemplate.gameObject.SetActive(false);
 
-        highscoreEntryList = new List<HighscoreEntry>() {
-            new HighscoreEntry{time = "00:12.24", name = "ABC"},
-            new HighscoreEntry{time = "01:34.20", name = "ABC"},
-            new HighscoreEntry{time = "00:12.24", name = "BOI"},
-            new HighscoreEntry{time = "00:12.24", name = "ABC"},
-            new HighscoreEntry{time = "08:88.88", name = "ABC"},
-            new HighscoreEntry{time = "00:12.24", name = "ABC"},
-            new HighscoreEntry{time = "00:12.24", name = "YOU"}
-        };
+        //Add new entry
+        //AddHighscoreEntry(8.82f, "JSG");
 
+        //Load Save data
+        string jsonString = PlayerPrefs.GetString("highscoreTable");
+        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+
+        
+        //Sort the times
+        for(int i = 0; i < highscores._highscoreEntryList.Count; i++) {
+            for(int j = i + 1; j < highscores._highscoreEntryList.Count; j++) {
+                if(highscores._highscoreEntryList[j].time < highscores._highscoreEntryList[i].time) {
+                    //Swap Places
+                    HighscoreEntry temp = highscores._highscoreEntryList[i];
+                    highscores._highscoreEntryList[i] = highscores._highscoreEntryList[j];
+                    highscores._highscoreEntryList[j] = temp;
+
+                }
+            }
+        }
+        
         highscoreEntryTransformList = new List<Transform>();
 
-        foreach(HighscoreEntry highscoreEntry in highscoreEntryList) {
+        foreach(HighscoreEntry highscoreEntry in highscores._highscoreEntryList) {
             CreateHighscoreEntryTransform(highscoreEntry, entryContainer, highscoreEntryTransformList);
         }
-    }
+;    }
 
+    private void Update()
+    {
+        //Exit Leaderboard Screen
+        if(Input.GetMouseButtonDown(0)) {
+            Time.timeScale = 1f;
+            Debug.Log("Opening Scene: " + sceneToLoad.name);
+            SceneManager.LoadScene(sceneToLoad.handle);
+        }
+    }
 
     private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList)
     {
@@ -68,21 +89,48 @@ public class LeaderboardController : MonoBehaviour
         entryTransform.Find("NAME entries").GetComponent<TextMeshProUGUI>().text = name;
 
         //May need to change variable datatype to Time
-        string time = highscoreEntry.time;
+        float time = highscoreEntry.time;
         entryTransform.Find("TIME entries").GetComponent<TextMeshProUGUI>().text = time.ToString();
 
         transformList.Add(entryTransform);
     }
 
+    /*
+     * Add entries to Leaderboard list
+     */ 
+    private void AddHighscoreEntry(float _time, string _name)
+    {
+        //Creates Entry
+        HighscoreEntry highscoreEntry = new HighscoreEntry { time = _time, name = _name };
 
+        //Load Save data
+        string jsonString = PlayerPrefs.GetString("highscoreTable");
+        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
+        //Add entry to list
+        highscores._highscoreEntryList.Add(highscoreEntry);
+
+        //Save updated data
+        string json = JsonUtility.ToJson(highscores);
+        PlayerPrefs.SetString("highscoreTable", json);
+        PlayerPrefs.Save();
+    }
+
+    /*
+     * Stores Highscore list for saving/loading
+     */ 
+    private class Highscores
+    {
+        public List<HighscoreEntry> _highscoreEntryList;
+    }
 
     /*
      * Represents single entry
      */
+     [System.Serializable]
     private class HighscoreEntry
     {
-        public string time;
+        public float time;
         public string name;
     }
 }
