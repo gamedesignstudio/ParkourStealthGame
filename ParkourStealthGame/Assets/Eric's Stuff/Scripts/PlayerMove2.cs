@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove2 : MonoBehaviour {
-    [SerializeField] private Rigidbody rigi;
+    //[SerializeField] private Rigidbody rigi;
 
     //Variable Names for Unity's Input Manager
     [SerializeField] private string verticalInputName;
@@ -46,6 +46,7 @@ public class PlayerMove2 : MonoBehaviour {
     private bool isJumping;
     [SerializeField] private AnimationCurve jumpFallOff;
     [SerializeField] private float jumpMultiplier;
+    private bool isClimbing;
 
 
 
@@ -58,7 +59,7 @@ public class PlayerMove2 : MonoBehaviour {
 
     private void Start()
     {
-        
+        isClimbing = false;
     }
 
     // Update is called once per frame
@@ -85,7 +86,10 @@ public class PlayerMove2 : MonoBehaviour {
         Vector3 forwardMovement = transform.forward * vertInput;
         Vector3 rightMovement = transform.right * horizInput;
 
+        
         charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
+       // else
+      //  charController.Move(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
 
         // if ((vertInput != 0 || horizInput != 0) && OnSlope())
         // charController.Move(Vector3.down * charController.height / 2 * slopeForce * Time.deltaTime);
@@ -163,13 +167,14 @@ public class PlayerMove2 : MonoBehaviour {
 
     private void ClimbUp()
     {
-      
+        List<GameObject> tempclmbPtList = new List<GameObject>();
 
-        clmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 1);
-        pointLocation = FurthestReachablePoint(clmbPtList);
+        tempclmbPtList = FindAllReachablePoints(this.gameObject.transform.position, maxReach, 1);
+     
+        pointLocation = FurthestReachablePoint(tempclmbPtList);
         Debug.Log("pointLocation found at: " + pointLocation);
         Debug.Log("Player location: " + charController.transform.position);
-        rigi.useGravity = false;
+        isClimbing = true;
         gravityScale = 0;
         slopeForce = 0;
         charController.transform.position = pointLocation;
@@ -293,7 +298,7 @@ public class PlayerMove2 : MonoBehaviour {
         {
             if (Input.GetKeyDown(ascend)) {
                 charController.Move(Vector3.forward * climbOver * Time.deltaTime);
-                rigi.useGravity = true;
+                isClimbing = false;
                 gravityScale = 1;
             }
         }
