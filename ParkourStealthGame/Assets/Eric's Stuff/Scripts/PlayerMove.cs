@@ -207,6 +207,9 @@ public class PlayerMove : MonoBehaviour
                 //set gravity off
                 playerRigi.useGravity = false;
 
+                //set isClimbing to true
+                isClimbing = true;
+
                 //move player to the point's location
                 this.transform.position = pointLocation;
             }
@@ -304,15 +307,17 @@ public class PlayerMove : MonoBehaviour
         //if player colliders with climbing point
         if (collider.tag == "climbingPoint")
         {
+            //set gravity true 
+            playerRigi.useGravity = true;
+
             //if climbing up
-            if (Input.GetKey(ascend))
+            if (isClimbing)
             {
 
                 //move rigidbody forward
                 this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
 
-                //set gravity true 
-                playerRigi.useGravity = true;
+              
                 
             }
         }
