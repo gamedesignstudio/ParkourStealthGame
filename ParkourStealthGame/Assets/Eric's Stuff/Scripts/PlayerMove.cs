@@ -36,6 +36,13 @@ public class PlayerMove : MonoBehaviour
     //variables used to store checkpoint locations
     public Vector3 respawnLoc;
 
+    //Variables for climbing
+    [SerializeField] private float climbSpeed;
+    [SerializeField] private KeyCode ascend;
+    [SerializeField] private KeyCode decend;
+    [SerializeField] private float maxReach;
+    private Vector3 pointLocation;
+
     private void Awake()
     {
         
@@ -60,9 +67,14 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //alter speed if crouching or sprinting
         ChangeSpeed();
+
         //call the player move function
         PlayerMovement();
+
+        //check to see if you're climbing
+        ClimbingCheck();
 
     }
 
@@ -178,6 +190,136 @@ public class PlayerMove : MonoBehaviour
          */
         return null;
     }
+
+    private void ClimbingCheck()
+    {
+        //check what direction you're climbing. 1 is up; 2 is right; 3 is down; 4 is left
+        if (Input.GetKeyDown(ascend))
+        {
+            Debug.Log("Climbing up");
+
+            //find furthest reachable point out of the list
+            pointLocation = FindReachablePoint(playerTrans.position, maxReach, 1);
+
+            //if there was a point found
+            if(pointLocation != playerTrans.position)
+            {
+                //set gravity off
+                playerRigi.useGravity = false;
+
+                //move player to the point's location
+                this.transform.position = pointLocation;
+            }
+
+        }
+
+        //do same thing as above except down
+        if (Input.GetKeyDown(decend))
+        {
+            Debug.Log("Climbing down");
+
+            //find furthest reachable point out of the list
+            pointLocation = FindReachablePoint(playerTrans.position, maxReach, 3);
+
+            //if there was a point found
+            if (pointLocation != null)
+            {
+                //set gravity off
+                playerRigi.useGravity = false;
+
+                //move player to the point's location
+                this.transform.position = pointLocation;
+            }
+        }
+    }
+
+    private Vector3 FindReachablePoint(Vector3 playerLoc, float maxDis, int dir)
+    {
+        //make a temp GameObject variable
+        GameObject tempObj;
+
+        //temp variable to nill
+        tempObj = null;
+
+        //make an array of GameObjects
+        GameObject[] tempArray;
+
+        //Store all climbing points into the array of gameObjects
+        tempArray = GameObject.FindGameObjectsWithTag("climbingPoint");
+
+        //for every gameObject in
+        foreach (GameObject o in tempArray)
+        {
+            //if the max distance is greater than or equal to than the distance between the player and climb point
+            if (maxDis >= Vector3.Distance(o.transform.position, this.transform.position))
+            {
+                //if the direction is up
+                if (dir == 1)
+                {
+                    //if tempObj is null set it to o
+                    if(tempObj == null)
+                    {
+                        tempObj = o;
+                    }
+                    //else if the distance from player to o is greater than the distance from player to tempObj
+                    else if (Vector3.Distance(o.transform.position, this.transform.position) > Vector3.Distance(tempObj.transform.position, this.transform.position))
+                    {
+                        tempObj = o;
+                    }
+                }
+
+                //if the direction is down
+                if (dir == 3)
+                {
+                    //if tempObj is null set it to o
+                    if (tempObj == null)
+                    {
+                        tempObj = o;
+                    }
+                    //else if the distance from player to o is greater than the distance from player to tempObj
+                    else if(Vector3.Distance(o.transform.position, this.transform.position) > Vector3.Distance(tempObj.transform.position, this.transform.position))
+                    {
+                        tempObj = o;
+                    }
+                }
+
+            }
+        }
+
+        //if tempObj is null let user know, else return the point's vector3 position
+        if(tempObj == null)
+        {
+            Debug.Log("Did not find a climbable point");
+            return playerTrans.position;
+        }
+        else
+        {
+            return tempObj.transform.position;
+        }
+
+    }
+
+    void onTriggerEnter(Collider collider)
+    {
+        //if player colliders with climbing point
+        if (collider.tag == "climbingPoint")
+        {
+            //if climbing up
+            if (Input.GetKey(ascend))
+            {
+
+                //move rigidbody forward
+                this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
+
+                //set gravity true 
+                playerRigi.useGravity = true;
+                
+            }
+        }
+
+    }
+
+
 
 
 }

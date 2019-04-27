@@ -512,7 +512,7 @@ ModelImporter:
       name: HumanoidIdleJumpUp
       takeName: _207_Idle_JumpUpMedium_NoHands1Step_Idle
       firstFrame: 114
-      lastFrame: 233
+      lastFrame: 138
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
