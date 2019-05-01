@@ -117,7 +117,9 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKey(forward))
         {
             //move rigidbody forward
-            this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
+            //this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
+            playerRigi.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+            //playerRigi.AddForce(transform.forward * speed * Time.deltaTime, ForceMode.Acceleration);
             // playerRigi.velocity = new Vector3(speed, 0, 0);
         }
         if (Input.GetKey(backwards))
@@ -302,7 +304,7 @@ public class PlayerMove : MonoBehaviour
 
     }
 
-    void onTriggerEnter(Collider collider)
+    void OnTriggerEnter(Collider collider)
     {
         //if player colliders with climbing point
         if (collider.tag == "climbingPoint")
@@ -322,8 +324,19 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
+        if(collider.tag == "checkpoint") {
+            respawnLoc = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        }
+
+        if(collider.tag == "death") {
+            Death();
+        }
+
     }
 
+    void Death() {
+        transform.position = respawnLoc;
+    }
 
 
 
