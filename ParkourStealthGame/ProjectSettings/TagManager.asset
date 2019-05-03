@@ -7,6 +7,7 @@ TagManager:
   - climbingPoint
   - checkpoint
   - death
+  - building
   layers:
   - Default
   - TransparentFX

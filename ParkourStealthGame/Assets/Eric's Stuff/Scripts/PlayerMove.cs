@@ -29,12 +29,12 @@ public class PlayerMove : MonoBehaviour
     private GameObject playerObj;
     
     //checks to see state of player
-    private bool isJumping;
+    private bool isGrounded;
     private bool isClimbing;
     private bool isSliding;
 
     //variables used to store checkpoint locations
-    public Vector3 respawnLoc;
+    private Vector3 respawnLoc;
 
     //Variables for climbing
     [SerializeField] private float climbSpeed;
@@ -60,6 +60,11 @@ public class PlayerMove : MonoBehaviour
         speed = normalSpeed;
 
         playerRigi.useGravity = true;
+
+        isGrounded = false;
+        isClimbing = false;
+        isSliding = false;
+
         //store player's current location as the respawn location
         respawnLoc = playerTrans.position;
     }
@@ -111,41 +116,34 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerMovement()
     {
-        //float horizInput = Input.GetAxisRaw("Horizontal");
-        //float vertInput = Input.GetAxis("Vertical");
-        //transform.Translate(horizInput * speed * Time.deltaTime, 0, vertical * speed * Time.deltaTime);
+        
         if (Input.GetKey(forward))
         {
             //move rigidbody forward
-            //this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
             playerRigi.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
-            //playerRigi.AddForce(transform.forward * speed * Time.deltaTime, ForceMode.Acceleration);
-            // playerRigi.velocity = new Vector3(speed, 0, 0);
         }
         if (Input.GetKey(backwards))
         {
-            //move rigidbody forward
-            this.transform.position = transform.position + -transform.forward * speed * Time.deltaTime;
+            //move rigidbody backwards
+            playerRigi.MovePosition(transform.position + -transform.forward * speed * Time.deltaTime);
         }
         if (Input.GetKey(left))
         {
-            //move rigidbody forward
-            this.transform.position = transform.position + -transform.right * speed * Time.deltaTime;
+            //move rigidbody left
+            playerRigi.MovePosition(transform.position + -transform.right * speed * Time.deltaTime);
         }
         if (Input.GetKey(right))
         {
-            //move rigidbody forward
-            this.transform.position = transform.position + transform.right * speed * Time.deltaTime;
+            //move rigidbody right
+            playerRigi.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+        }
+        if(Input.GetKeyDown(jump) && isGrounded) {
+            //move rigidbody up
+            playerRigi.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
+
+            isGrounded = false;
         }
         
-
-        //create a vector 3 that tells the object where you want to go
-        //Vector3 movement = new Vector3(horizInput * speed * Time.deltaTime, 0, vertInput * speed * Time.deltaTime);
-
-        // playerRigi.MovePosition(transform.position + movement);
-
-
-        JumpInput();
 
     }
 
@@ -155,42 +153,9 @@ public class PlayerMove : MonoBehaviour
         return false;
     }
 
-    private void JumpInput()
+    void OnCollisionStay()
     {
-        if (OnSlope() && Input.GetKeyDown(jump))
-        {
-            isJumping = true;
-
-            //playerRigi.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
-
-            //move rigidbody forward
-            this.transform.position = transform.position + transform.up * jumpHeight * Time.deltaTime;
-
-            isJumping = false;
-        }
-
-    }
-
-    private IEnumerator JumpEvent()
-    {
-        /* float timeInAir = 0.0f;
-         charController.slopeLimit = 90.0f;
-
-         do
-         {
-             float jumpForce = jumpFallOff.Evaluate(timeInAir);
-             charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
-             timeInAir += Time.deltaTime;
-
-             yield return null;
-
-         } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
-
-
-         charController.slopeLimit = 45.0f;
-         isJumping = false;
-         */
-        return null;
+        isGrounded = true;
     }
 
     private void ClimbingCheck()
