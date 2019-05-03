@@ -24,13 +24,20 @@ public class TimerController : MonoBehaviour
             return;
         }
 
-        float t = Time.time - startTime;
+        float timeBuffer = Time.time - startTime;
+        PlayerPrefs.SetFloat("PlayerTimeFloat", timeBuffer);
+        TimeFormatter();
+    }
+
+    public void TimeFormatter()
+    {
+        float t = PlayerPrefs.GetFloat("PlayerTimeFloat");
 
         string minutes = ((int)t / 60).ToString("00");
         string seconds = (t % 60).ToString("00.00");
 
         timerText.text = minutes + ":" + seconds;
-        //Debug.Log("TIME" + Time.time);
+        PlayerPrefs.SetString("PlayerTimeString", timerText.text);
     }
 
     public void Finish()

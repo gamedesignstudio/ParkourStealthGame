@@ -33,7 +33,6 @@ public class PauseMenuController : MonoBehaviour
         pauseMenuUI.SetActive(false);
         timerUI.SetActive(true);
         Camera.main.GetComponent<PlayerLook>().enabled = true;
-        Time.timeScale = 1f;
         isPaused = false;
     }
 
@@ -43,7 +42,6 @@ public class PauseMenuController : MonoBehaviour
         pauseMenuUI.SetActive(true);
         timerUI.SetActive(false);
         Camera.main.GetComponent<PlayerLook>().enabled = false;
-        Time.timeScale = 0f;
         isPaused = true;
     }
 
@@ -51,7 +49,6 @@ public class PauseMenuController : MonoBehaviour
     {
         Debug.Log("Exitting to Main Menu...");
         Debug.Log("Opening Scene: " + SceneToLoad);
-        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneToLoad.name);
         isPaused = false;
     }
@@ -61,10 +58,12 @@ public class PauseMenuController : MonoBehaviour
         if(isPaused) {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
         }
         else {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f;
         }
     }
 }

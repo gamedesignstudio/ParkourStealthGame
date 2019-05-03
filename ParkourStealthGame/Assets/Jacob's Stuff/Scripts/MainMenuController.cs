@@ -1,30 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] private Scene SceneToLoad;
     [SerializeField] private Scene LeaderboardScene;
+    [SerializeField] private Button leaderBoardButton;
 
-    void Start() {
-        Cursor.visible = true;
+    private void Awake()
+    {
+        //Uncomment to delete Leaderboard Entries
+        //PlayerPrefs.DeleteKey("LeaderboardEntries");
+
+        Time.timeScale = 1f;
+
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        if(!PlayerPrefs.HasKey("LeaderboardEntries")) {
+            leaderBoardButton.interactable = false;
+        }
+        else {
+            leaderBoardButton.interactable = true;
+        }
+        Debug.Log("Scene Opened: " + SceneManager.GetActiveScene().name);
     }
 
     public void PlayGame()
     {
-        Time.timeScale = 1f;
-        Debug.Log("Opening Scene: " + SceneToLoad.name);
+        PlayerPrefs.SetInt("AddEntry", 1);
+        PlayerPrefs.SetString("PlayerTimeString", "");
         SceneManager.LoadScene(SceneToLoad.handle);
     }
 
     public void LeaderboardMenu()
     {
-        Time.timeScale = 1f;
-        Debug.Log("Opening Scene: " + LeaderboardScene.name);
         SceneManager.LoadScene(LeaderboardScene.handle);
+        PlayerPrefs.SetInt("AddEntry", 0);
     }
 
     public void QuitGame()
