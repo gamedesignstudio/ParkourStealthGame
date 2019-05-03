@@ -10,9 +10,6 @@ public class GameOverController : MonoBehaviour
     [SerializeField] private InputField input;
     [SerializeField] private Scene sceneToLoad;
 
-    [SerializeField] private TextMeshProUGUI scoreText;
-    private int finalScore;
-
     [SerializeField] private TextMeshProUGUI timeText;
     private string finalTime;
 
@@ -21,10 +18,6 @@ public class GameOverController : MonoBehaviour
         //input = GameObject.Find("InputField").GetComponent<InputField>();
         input.characterLimit = 3;
         input.ActivateInputField();
-
-        //Setup Score and Time display
-        finalScore = PlayerPrefs.GetInt("PlayerScore");
-        scoreText.text = finalScore.ToString();
 
         finalTime = PlayerPrefs.GetString("PlayerTimeString");
         timeText.text = finalTime;

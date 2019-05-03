@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Jacob's Stuff/Level Design.unity
     guid: c9763da9eb8f943bcb12ce3633ef7a9b
+  - enabled: 1
+    path: Assets/Jacob's Stuff/Game Over.unity
+    guid: aa08c609c17131d4d8314eb8c2833203
   m_configObjects: {}
