@@ -146,7 +146,7 @@ public class LeaderboardController : MonoBehaviour
         for(int i = 0; i < highscores.entries.Count; i++) {
             for(int j = i + 1; j < highscores.entries.Count; j++) {
                 //...by timeFloat
-                if(highscores.entries[j].timeFloat > highscores.entries[i].timeFloat) {
+                if(highscores.entries[j].timeFloat < highscores.entries[i].timeFloat) {
                     //Swap
                     HighscoreEntry temp = highscores.entries[i];
                     highscores.entries[i] = highscores.entries[j];

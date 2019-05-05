@@ -8,6 +8,7 @@ TagManager:
   - checkpoint
   - death
   - building
+  - finish
   layers:
   - Default
   - TransparentFX

@@ -31,7 +31,6 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayGame()
     {
-        PlayerPrefs.SetInt("AddEntry", 1);
         PlayerPrefs.SetString("PlayerTimeString", "");
         SceneManager.LoadScene(SceneToLoad.handle);
     }

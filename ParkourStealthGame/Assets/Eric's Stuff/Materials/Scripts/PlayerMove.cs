@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -42,6 +43,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private KeyCode decend;
     [SerializeField] private float maxReach;
     private Vector3 pointLocation;
+
+    //Variables for Finishing level
+    [SerializeField] private Scene SceneToLoad;
 
     private void Awake()
     {
@@ -154,10 +158,11 @@ public class PlayerMove : MonoBehaviour
         return false;
     }
 
-    void OnCollisionStay()
+    private void OnCollisionEnter(Collision other)
     {
-        isGrounded = true;
-        
+        if(other.gameObject.tag == "building" && isGrounded == false) {
+            isGrounded = true;
+        }
     }
 
     private void ClimbingCheck()
@@ -305,6 +310,10 @@ public class PlayerMove : MonoBehaviour
             Death();
         }
 
+        if(collider.tag == "finish") {
+            Debug.Log("FINISHED!");
+            SceneManager.LoadScene(SceneToLoad.handle);
+        }
     }
 
     void Death() {

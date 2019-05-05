@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class GameOverController : MonoBehaviour
+public class FinishLineController : MonoBehaviour
 {
     [SerializeField] private InputField input;
     [SerializeField] private Scene sceneToLoad;
@@ -14,6 +14,9 @@ public class GameOverController : MonoBehaviour
     private string finalTime;
 
     private void Awake() {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         //Setup InputField Restrictions
         //input = GameObject.Find("InputField").GetComponent<InputField>();
         input.characterLimit = 3;
