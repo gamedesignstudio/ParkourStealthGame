@@ -116,35 +116,36 @@ public class PlayerMove : MonoBehaviour
 
     private void PlayerMovement()
     {
-        
-        if (Input.GetKey(forward))
-        {
-            //move rigidbody forward
-            playerRigi.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(backwards))
-        {
-            //move rigidbody backwards
-            playerRigi.MovePosition(transform.position + -transform.forward * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(left))
-        {
-            //move rigidbody left
-            playerRigi.MovePosition(transform.position + -transform.right * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(right))
-        {
-            //move rigidbody right
-            playerRigi.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
-        }
-        if(Input.GetKeyDown(jump) && isGrounded) {
-            //move rigidbody up
-            playerRigi.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
+        //make sure player is not climbing
+        if (!isClimbing) {
+            if (Input.GetKey(forward))
+            {
+                //move rigidbody forward
+                playerRigi.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(backwards))
+            {
+                //move rigidbody backwards
+                playerRigi.MovePosition(transform.position + -transform.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(left))
+            {
+                //move rigidbody left
+                playerRigi.MovePosition(transform.position + -transform.right * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(right))
+            {
+                //move rigidbody right
+                playerRigi.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+            }
+            if (Input.GetKeyDown(jump) && isGrounded)
+            {
+                //move rigidbody up
+                playerRigi.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
 
-            isGrounded = false;
+                isGrounded = false;
+            }
         }
-        
-
     }
 
     private bool OnSlope()
@@ -156,6 +157,7 @@ public class PlayerMove : MonoBehaviour
     void OnCollisionStay()
     {
         isGrounded = true;
+        
     }
 
     private void ClimbingCheck()
@@ -171,6 +173,7 @@ public class PlayerMove : MonoBehaviour
             //if there was a point found
             if(pointLocation != playerTrans.position)
             {
+                Debug.Log("Point Location: " + pointLocation);
                 //set gravity off
                 playerRigi.useGravity = false;
 
@@ -178,7 +181,7 @@ public class PlayerMove : MonoBehaviour
                 isClimbing = true;
 
                 //move player to the point's location
-                this.transform.position = pointLocation;
+                playerRigi.MovePosition(pointLocation);
             }
 
         }
@@ -221,21 +224,26 @@ public class PlayerMove : MonoBehaviour
         foreach (GameObject o in tempArray)
         {
             //if the max distance is greater than or equal to than the distance between the player and climb point
-            if (maxDis >= Vector3.Distance(o.transform.position, this.transform.position))
+            if (maxDis >= Vector3.Distance(o.transform.position, transform.position))
             {
                 //if the direction is up
                 if (dir == 1)
                 {
-                    //if tempObj is null set it to o
-                    if(tempObj == null)
+                    //check to make sure the position has a higher y position
+                    if(o.transform.position.y > transform.position.y)
                     {
-                        tempObj = o;
+                        //if tempObj is null set it to o
+                        if (tempObj == null)
+                        {
+                            tempObj = o;
+                        }
+                        //else if the distance from player to o is greater than the distance from player to tempObj
+                        else if (Vector3.Distance(o.transform.position, transform.position) > Vector3.Distance(tempObj.transform.position, transform.position))
+                        {
+                            tempObj = o;
+                        }
                     }
-                    //else if the distance from player to o is greater than the distance from player to tempObj
-                    else if (Vector3.Distance(o.transform.position, this.transform.position) > Vector3.Distance(tempObj.transform.position, this.transform.position))
-                    {
-                        tempObj = o;
-                    }
+                   
                 }
 
                 //if the direction is down
@@ -247,7 +255,7 @@ public class PlayerMove : MonoBehaviour
                         tempObj = o;
                     }
                     //else if the distance from player to o is greater than the distance from player to tempObj
-                    else if(Vector3.Distance(o.transform.position, this.transform.position) > Vector3.Distance(tempObj.transform.position, this.transform.position))
+                    else if(Vector3.Distance(o.transform.position, transform.position) > Vector3.Distance(tempObj.transform.position, transform.position))
                     {
                         tempObj = o;
                     }
@@ -282,9 +290,9 @@ public class PlayerMove : MonoBehaviour
             {
 
                 //move rigidbody forward
-                this.transform.position = transform.position + transform.forward * speed * Time.deltaTime;
+                playerRigi.MovePosition(transform.position + transform.forward * speed * 2 * Time.deltaTime);
 
-              
+                isClimbing = false;
                 
             }
         }
@@ -301,6 +309,10 @@ public class PlayerMove : MonoBehaviour
 
     void Death() {
         transform.position = respawnLoc;
+
+        //need to make sure is climbing is false and gravity is on
+        isClimbing = false;
+        playerRigi.useGravity = true;
     }
 
 
