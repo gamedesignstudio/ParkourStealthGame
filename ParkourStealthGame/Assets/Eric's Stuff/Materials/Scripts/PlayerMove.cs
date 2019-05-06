@@ -32,7 +32,9 @@ public class PlayerMove : MonoBehaviour
     //checks to see state of player
     private bool isGrounded;
     private bool isClimbing;
-    private bool isSliding;
+    private bool isCrouching;
+    private bool isFalling;
+    private int choice;
 
     //variables used to store checkpoint locations
     private Vector3 respawnLoc;
@@ -65,9 +67,12 @@ public class PlayerMove : MonoBehaviour
 
         playerRigi.useGravity = true;
 
+        Random.seed = System.DateTime.Now.Millisecond;
+
         isGrounded = false;
         isClimbing = false;
-        isSliding = false;
+        isCrouching = false;
+        isFalling = false;
 
         //store player's current location as the respawn location
         respawnLoc = playerTrans.position;
@@ -102,17 +107,24 @@ public class PlayerMove : MonoBehaviour
     private void ChangeSpeed()
     {
         //if crouch set speed to crouchSpeed; if sprint set speet to runSpeed; else speed = normalSpeed
-        if (Input.GetKey(crouch))
+        if (Input.GetKey(crouch) && isGrounded)
         {
             speed = crouchSpeed;
+            isCrouching = true;
+        }
+        else if(Input.GetKey(crouch) && !isGrounded) {
+            speed = normalSpeed;
+            isCrouching = true;
         }
         else if (Input.GetKey(sprint))
         {
             speed = runSpeed;
+            isCrouching = false;
         }
         else
         {
             speed = normalSpeed;
+            isCrouching = false;
         }
 
 
@@ -160,8 +172,12 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.tag == "building" && isGrounded == false) {
+        if((other.gameObject.tag == "building" || other.gameObject.tag == "plank") && isGrounded == false) {
             isGrounded = true;
+        }
+
+        if(isFalling) {
+            Death();
         }
     }
 
@@ -179,6 +195,10 @@ public class PlayerMove : MonoBehaviour
             if(pointLocation != playerTrans.position)
             {
                 Debug.Log("Point Location: " + pointLocation);
+
+
+                playerRigi.velocity = new Vector3(0f, 0f, 0f);
+
                 //set gravity off
                 playerRigi.useGravity = false;
 
@@ -302,6 +322,14 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
+        if(collider.tag == "falling") {
+            isFalling = true;
+        }
+
+        if(collider.tag == "landing") {
+            isFalling = false;
+        }
+
         if(collider.tag == "checkpoint") {
             respawnLoc = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
@@ -314,6 +342,49 @@ public class PlayerMove : MonoBehaviour
             Debug.Log("FINISHED!");
             SceneManager.LoadScene(SceneToLoad.handle);
         }
+
+        if(collider.tag == "plank") {
+             choice = Random.Range(1, 3);
+            Debug.Log("Random value: " + choice);
+        }
+    }
+
+    private void OnTriggerStay(Collider collider) {
+
+        //if player colliders with climbing point
+        if(collider.tag == "climbingPoint") {
+            //set gravity true 
+            playerRigi.useGravity = true;
+
+            //if climbing up
+            if(isClimbing) {
+
+                //move rigidbody forward
+                playerRigi.MovePosition(transform.position + transform.forward * speed * 2 * Time.deltaTime);
+
+                isClimbing = false;
+
+            }
+        }
+
+        //Plank colliders
+        if(collider.tag == "plank" && choice == 1) {
+            if(!isCrouching) {
+                playerRigi.AddForce(transform.right * 150f);
+            }
+            else {
+                playerRigi.AddForce(Vector3.zero);
+            }
+        }
+
+        if(collider.tag == "plank" && choice == 2) {
+            if(!isCrouching) {
+                playerRigi.AddForce(-transform.right * 150f);
+            }
+            else {
+                playerRigi.AddForce(Vector3.zero);
+            }
+        }
     }
 
     void Death() {
@@ -321,6 +392,7 @@ public class PlayerMove : MonoBehaviour
 
         //need to make sure is climbing is false and gravity is on
         isClimbing = false;
+        isFalling = false;
         playerRigi.useGravity = true;
     }
 

@@ -9,6 +9,9 @@ TagManager:
   - death
   - building
   - finish
+  - plank
+  - landing
+  - falling
   layers:
   - Default
   - TransparentFX
