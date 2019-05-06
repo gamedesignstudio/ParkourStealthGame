@@ -11,6 +11,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float runSpeed;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float jumpHeight;
+    [SerializeField] private float climbingSpeed;
 
     //controls for moving
     [SerializeField] private KeyCode forward;
@@ -94,6 +95,9 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(isClimbing && pointLocation != transform.position) {
+            playerRigi.position = Vector3.MoveTowards(transform.position, pointLocation, climbingSpeed);
+        }
         /*
         if (Input.GetKey(forward))
         {
@@ -206,7 +210,7 @@ public class PlayerMove : MonoBehaviour
                 isClimbing = true;
 
                 //move player to the point's location
-                playerRigi.MovePosition(pointLocation);
+                //playerRigi.MovePosition(pointLocation);
             }
 
         }

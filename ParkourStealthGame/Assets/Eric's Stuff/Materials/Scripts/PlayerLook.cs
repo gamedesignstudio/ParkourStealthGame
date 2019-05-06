@@ -48,11 +48,11 @@ public class PlayerLook : MonoBehaviour
         {
             xAxisClamp = 60.0f;
             mouseY = 0.0f;
-            //ClampXAxisRotationToValue(270.0f);
+            ClampXAxisRotationToValue(300.0f);
         }
-        else if (xAxisClamp < -68.0f)
+        else if (xAxisClamp < -90.0f)
         {
-            xAxisClamp = -68.0f;
+            xAxisClamp = -90.0f;
             mouseY = 0.0f;
         }
         transform.Rotate(Vector3.left * mouseY);

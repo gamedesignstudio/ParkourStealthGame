@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Jacob's Stuff/Finish Line.unity
     guid: aa08c609c17131d4d8314eb8c2833203
+  - enabled: 1
+    path: Assets/Jacob's Stuff/Controls.unity
+    guid: 5323586c79d2243e899d66d0c3260526
   m_configObjects: {}

@@ -10,6 +10,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Scene LeaderboardScene;
     [SerializeField] private Button leaderBoardButton;
 
+    [SerializeField] private Scene ControlsScene;
+    [SerializeField] private Button controlsButton;
+
     private void Awake()
     {
         //Uncomment to delete Leaderboard Entries
@@ -39,6 +42,10 @@ public class MainMenuController : MonoBehaviour
     {
         SceneManager.LoadScene(LeaderboardScene.handle);
         PlayerPrefs.SetInt("AddEntry", 0);
+    }
+
+    public void ControlsMenu() {
+        SceneManager.LoadScene(ControlsScene.handle);
     }
 
     public void QuitGame()
