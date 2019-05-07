@@ -36,6 +36,7 @@ public class PlayerMove : MonoBehaviour
     //access other clip for crash pad
     public AudioClip crashPad;
     public AudioClip footsteps;
+   
     
     //checks to see state of player
     private bool isGrounded;
