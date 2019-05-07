@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+
 
 public class PlayerMove : MonoBehaviour
 {
@@ -29,12 +31,18 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody playerRigi;
     private MeshCollider playerCol;
     private GameObject playerObj;
+    private AudioSource sound;
+
+    //access other clip for crash pad
+    public AudioClip crashPad;
+    public AudioClip footsteps;
     
     //checks to see state of player
     private bool isGrounded;
     private bool isClimbing;
     private bool isCrouching;
     private bool isFalling;
+    private bool isMoving;
     private int choice;
 
     //variables used to store checkpoint locations
@@ -53,6 +61,7 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         
+       
     }
 
 
@@ -62,7 +71,8 @@ public class PlayerMove : MonoBehaviour
         playerTrans = GetComponent<Transform>();
         playerRigi = GetComponent<Rigidbody>();
         playerCol = GetComponent<MeshCollider>();
-
+        sound = GetComponent<AudioSource>();
+        
         //set the speed to normal (jogging) speed
         speed = normalSpeed;
 
@@ -74,6 +84,7 @@ public class PlayerMove : MonoBehaviour
         isClimbing = false;
         isCrouching = false;
         isFalling = false;
+       
 
         //store player's current location as the respawn location
         respawnLoc = playerTrans.position;
@@ -91,6 +102,9 @@ public class PlayerMove : MonoBehaviour
         //check to see if you're climbing
         ClimbingCheck();
 
+        //Call to play sound when player is moving
+        AudioManager(); //sound.Play(); when player is moving and grounded
+        
     }
 
     void FixedUpdate()
@@ -115,6 +129,7 @@ public class PlayerMove : MonoBehaviour
         {
             speed = crouchSpeed;
             isCrouching = true;
+            
         }
         else if(Input.GetKey(crouch) && !isGrounded) {
             speed = normalSpeed;
@@ -142,6 +157,7 @@ public class PlayerMove : MonoBehaviour
             {
                 //move rigidbody forward
                 playerRigi.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+                
             }
             if (Input.GetKey(backwards))
             {
@@ -165,8 +181,59 @@ public class PlayerMove : MonoBehaviour
 
                 isGrounded = false;
             }
+            if (Input.GetKey(forward) || Input.GetKey(backwards) || Input.GetKey(right) || Input.GetKey(left))
+            {
+
+                isMoving = true;
+                Debug.Log("Moving");
+            }
+            if (!Input.GetKey(forward) && !Input.GetKey(backwards) && !Input.GetKey(right) && !Input.GetKey(left))
+            {
+
+                isMoving = false;
+                Debug.Log("No Moving");
+            }
         }
+
+       
+
     }
+
+    private void AudioManager() {
+
+        if (isGrounded && isMoving)
+        {
+
+            //PlaySound
+            if (!sound.isPlaying) {
+                sound.pitch = 1.2f;
+                sound.volume = 0.8f;
+                sound.Play();
+            }
+
+            if (Input.GetKey(sprint))
+            {
+
+                sound.pitch = 2f;
+                sound.volume = 1f;
+
+            }
+            if (Input.GetKey(crouch))
+            {
+                sound.pitch = 0.7f;
+                sound.volume = 0.5f;
+            }
+
+            if (!Input.GetKey(sprint) && !Input.GetKey(crouch))
+            {
+                sound.pitch = 1.2f;
+                sound.volume = 0.8f;
+            }      
+        }if (!isMoving || !isGrounded || isClimbing) sound.Stop();
+        
+        
+    }
+    
 
     private bool OnSlope()
     {
@@ -178,8 +245,10 @@ public class PlayerMove : MonoBehaviour
     {
         if((other.gameObject.tag == "building" || other.gameObject.tag == "plank") && isGrounded == false) {
             isGrounded = true;
+            
         }
-
+        
+        if (other.gameObject.tag != "landing") sound.clip = footsteps; 
         if(isFalling) {
             Death();
         }
@@ -330,7 +399,8 @@ public class PlayerMove : MonoBehaviour
             isFalling = true;
         }
 
-        if(collider.tag == "landing") {
+        if (collider.tag == "landing")
+        {
             isFalling = false;
         }
 
