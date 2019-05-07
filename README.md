@@ -19,8 +19,8 @@ Ben Brady
 	-Player Animations (redone)
 Eric Hatfield
 	-Additional Landscape
-	-Basic Player/Camera Movement (scrapped)
-	-Player Animations (scrapped)
+	-Basic Player/Camera Movement (discarded)
+	-Player Animations (discarded)
 	-Sound Design
 
 *Some assets used in this game our not our own original ideas, and are provided in the links below.
